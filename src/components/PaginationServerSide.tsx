@@ -59,11 +59,11 @@ const PaginationServerSide: React.FC<PaginationProps> = ({
 
   return (
     <Box
-      mt={4}
       display="flex"
       justifyContent="space-between"
       alignItems="center"
       flexWrap="wrap"
+      width={"100%"}
     >
       <FormControl sx={{ width: 200, mb: 2 }}>
         <Select

@@ -10,7 +10,6 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ onSearch }: SearchBarProps) {
-  //   const [value, setValue] = useState("");
   const { query, setQuery } = useUserStore();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;

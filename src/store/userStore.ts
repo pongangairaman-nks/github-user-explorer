@@ -27,6 +27,9 @@ interface GitHubRepo {
   description: string;
   stargazers_count: number;
   html_url: string;
+  forks_count: number;
+  updated_at: string;
+  language: string | null;
 }
 
 interface UserStore {
