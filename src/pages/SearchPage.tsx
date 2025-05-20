@@ -47,10 +47,10 @@ export default function SearchPage() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={4} lg={5}>
+      <Grid item xs={12} md={12} lg={12}>
         <SearchBar onSearch={handleSearch} />
       </Grid>
-      <Grid item xs={12} md={4} lg={7}>
+      <Grid item xs={12} md={12} lg={12}>
         {usersLoading ? (
           Array.from({ length: 5 }).map((_, i) => <UserCardSkeleton key={i} />)
         ) : users.length > 0 ? (
@@ -58,6 +58,7 @@ export default function SearchPage() {
             <UserCard
               key={user.id}
               avatarUrl={user.avatar_url}
+              githubUrl={user.html_url}
               username={user.login}
               onClick={() => navigate(`/user/${user.login}`)}
             />
