@@ -3,17 +3,27 @@ import { useParams } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
 import UserProfileCard from "../components/UserProfileCard";
 import { CircularProgress, Typography, Box, Grid } from "@mui/material";
+import RepoCard from "../components/RepoCard";
+import RepoCardSkeleton from "../components/RepoCardSkeleton";
 
 const UserProfilePage: React.FC = () => {
   const { username } = useParams<{ username: string }>();
-  const { userProfile, profileLoading, profileError, fetchUserProfile } =
-    useUserStore();
+  const {
+    userProfile,
+    profileLoading,
+    profileError,
+    repos,
+    repoLoading,
+    fetchUserProfile,
+    fetchRepos
+  } = useUserStore();
 
   useEffect(() => {
     if (username) {
       fetchUserProfile(username);
+      fetchRepos(username);
     }
-  }, [username, fetchUserProfile]);
+  }, [username, fetchUserProfile, fetchRepos]);
 
   if (profileLoading) {
     return (
@@ -45,7 +55,26 @@ const UserProfilePage: React.FC = () => {
         <UserProfileCard user={userProfile} />
       </Grid>
       <Grid item xs={12} md={4} lg={7}>
-        <Box>Respository List</Box>
+        <Typography variant="h6" mb={2}>
+          Repositories
+        </Typography>
+        {repoLoading ? (
+          Array.from({ length: 5 }).map((_, i) => <RepoCardSkeleton key={i} />)
+        ) : repos.length > 0 ? (
+          repos.map((repo) => (
+            <RepoCard
+              key={repo.id}
+              name={repo.name}
+              description={repo.description}
+              stars={repo.stargazers_count}
+              url={repo.html_url}
+            />
+          ))
+        ) : (
+          <Typography variant="body1" color="text.secondary" mt={2}>
+            No repositories found.
+          </Typography>
+        )}
       </Grid>
     </Grid>
   );
