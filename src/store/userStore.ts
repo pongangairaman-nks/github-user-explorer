@@ -1,5 +1,9 @@
 import { create } from "zustand";
-import { searchUsers, fetchUserProfileAPI } from "../services/githubAPI";
+import {
+  searchUsers,
+  fetchUserProfileAPI,
+  getUserRepos
+} from "../services/githubAPI";
 
 interface GitHubUser {
   login: string;
@@ -15,6 +19,14 @@ interface UserProfile {
   public_repos: number;
 }
 
+interface GitHubRepo {
+  id: number;
+  name: string;
+  description: string;
+  stargazers_count: number;
+  html_url: string;
+}
+
 interface UserStore {
   query: string;
   results: GitHubUser[];
@@ -24,11 +36,15 @@ interface UserStore {
   userProfile: UserProfile | null;
   profileLoading: boolean;
   profileError: string | null;
+  repos: GitHubRepo[];
+  repoLoading: boolean;
+  repoError: string | null;
 
   setQuery: (query: string) => void;
   fetchUsers: (query: string) => void;
 
   fetchUserProfile: (username: string) => void;
+  fetchRepos: (username: string) => void;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -40,7 +56,9 @@ export const useUserStore = create<UserStore>((set) => ({
   userProfile: null,
   profileLoading: false,
   profileError: null,
-
+  repos: [],
+  repoLoading: false,
+  repoError: null,
   setQuery: (query) => set({ query }),
 
   fetchUsers: async (query) => {
@@ -65,6 +83,16 @@ export const useUserStore = create<UserStore>((set) => ({
         profileError: "Failed to fetch profile" + error,
         profileLoading: false
       });
+    }
+  },
+  fetchRepos: async (username) => {
+    if (!username) return;
+    set({ repoLoading: true, repoError: null, repos: [] });
+    try {
+      const repos = await getUserRepos(username);
+      set({ repos, repoLoading: false });
+    } catch (error) {
+      set({ repoError: "Failed to fetch repos: " + error, repoLoading: false });
     }
   }
 }));
