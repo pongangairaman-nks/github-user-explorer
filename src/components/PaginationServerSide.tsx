@@ -10,21 +10,21 @@ import {
 } from "@mui/material";
 
 interface RepoPaginationProps {
-  totalRepos: number;
-  reposPerPage: number;
+  totalCount: number;
+  perPage: number;
   currentPage: number;
   onPageChange: (page: number) => void;
   onPerPageChange: (event: SelectChangeEvent<number>) => void;
 }
 
 const PaginationServerSide: React.FC<RepoPaginationProps> = ({
-  totalRepos,
-  reposPerPage,
+  totalCount,
+  perPage,
   currentPage,
   onPageChange,
   onPerPageChange
 }) => {
-  const totalPages = Math.ceil(totalRepos / reposPerPage);
+  const totalPages = Math.ceil(totalCount / perPage);
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
@@ -39,7 +39,7 @@ const PaginationServerSide: React.FC<RepoPaginationProps> = ({
         <InputLabel id="per-page-label">Per Page</InputLabel>
         <Select
           labelId="per-page-label"
-          value={reposPerPage}
+          value={perPage}
           label="Per Page"
           onChange={onPerPageChange}
         >

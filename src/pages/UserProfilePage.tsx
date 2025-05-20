@@ -82,8 +82,8 @@ const UserProfilePage: React.FC = () => {
           flexWrap="wrap"
         >
           <PaginationServerSide
-            totalRepos={totalRepos}
-            reposPerPage={reposPerPage}
+            totalCount={totalRepos}
+            perPage={reposPerPage}
             currentPage={repoCurrentPage}
             onPageChange={handlePageClick}
             onPerPageChange={handlePerPageChange}

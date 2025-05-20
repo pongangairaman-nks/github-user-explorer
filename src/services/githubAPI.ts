@@ -1,8 +1,14 @@
 import axios from "axios";
 
-export async function searchUsers(query: string) {
-  const res = await axios.get(`https://api.github.com/search/users?q=${query}`);
-  return res.data.items;
+export async function searchUsers(query: string, page = 1, perPage = 10) {
+  const res = await axios.get(`https://api.github.com/search/users`, {
+    params: {
+      q: query,
+      page,
+      per_page: perPage
+    }
+  });
+  return res.data;
 }
 
 export const fetchUserProfileAPI = async (username: string) => {
