@@ -10,9 +10,20 @@ export const fetchUserProfileAPI = async (username: string) => {
   return response.data;
 };
 
-export const getUserRepos = async (username: string) => {
+export const getUserRepos = async (
+  username: string,
+  page = 1,
+  perPage = 10
+) => {
   const response = await axios.get(
-    `https://api.github.com/users/${username}/repos`
+    `https://api.github.com/users/${username}/repos`,
+    {
+      params: {
+        page,
+        per_page: perPage,
+        sort: "updated"
+      }
+    }
   );
   return response.data;
 };
