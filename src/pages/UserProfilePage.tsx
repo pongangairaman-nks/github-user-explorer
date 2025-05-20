@@ -2,16 +2,16 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
 import UserProfileCard from "../components/UserProfileCard";
-import { CircularProgress, Typography, Box, Grid } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 import RepoCard from "../components/RepoCard";
 import RepoCardSkeleton from "../components/RepoCardSkeleton";
+import UserProfileCardSkeleton from "../components/UserProfileCardSkeleton";
 
 const UserProfilePage: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   const {
     userProfile,
     profileLoading,
-    profileError,
     repos,
     repoLoading,
     fetchUserProfile,
@@ -25,34 +25,18 @@ const UserProfilePage: React.FC = () => {
     }
   }, [username, fetchUserProfile, fetchRepos]);
 
-  if (profileLoading) {
-    return (
-      <Box display="flex" justifyContent="center" mt={4}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (profileError) {
-    return (
-      <Typography color="error" align="center" mt={4}>
-        {profileError}
-      </Typography>
-    );
-  }
-
-  if (!userProfile) {
-    return (
-      <Typography align="center" mt={4}>
-        No user data available.
-      </Typography>
-    );
-  }
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={4} lg={5}>
-        <UserProfileCard user={userProfile} />
+        {profileLoading ? (
+          <UserProfileCardSkeleton />
+        ) : userProfile ? (
+          <UserProfileCard user={userProfile} />
+        ) : (
+          <Typography align="center" mt={4}>
+            No user data available.
+          </Typography>
+        )}
       </Grid>
       <Grid item xs={12} md={4} lg={7}>
         <Typography variant="h6" mb={2}>
