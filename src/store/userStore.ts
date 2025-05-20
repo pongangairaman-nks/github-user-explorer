@@ -34,8 +34,8 @@ interface UserStore {
   totalUsers: number;
   usersCurrentPage: number;
   usersPerPage: number;
-  loading: boolean;
-  error: string | null;
+  usersLoading: boolean;
+  usersError: string | null;
 
   userProfile: UserProfile | null;
   profileLoading: boolean;
@@ -48,11 +48,14 @@ interface UserStore {
   reposPerPage: number;
   totalRepos: number;
 
+  setQuery: (query: string) => void;
+  setUsersCurrentPage: (query: number) => void;
+  setUsersPerPage: (query: number) => void;
+
   setReposCurrentPage: (query: number) => void;
   setReposPerPage: (query: number) => void;
 
-  setQuery: (query: string) => void;
-  fetchUsers: (query: string) => void;
+  fetchUsersWithPage: (query: string) => void;
 
   fetchUserProfile: (username: string) => void;
   fetchReposWithPage: (username: string, page: number) => void;
@@ -64,8 +67,8 @@ export const useUserStore = create<UserStore>((set, get) => ({
   totalUsers: 0,
   usersCurrentPage: 1,
   usersPerPage: 10,
-  loading: false,
-  error: null,
+  usersLoading: false,
+  usersError: null,
 
   userProfile: null,
   profileLoading: false,
@@ -78,23 +81,32 @@ export const useUserStore = create<UserStore>((set, get) => ({
   repoLoading: false,
   repoError: null,
 
+  setQuery: (query) => set({ query }),
   setUsersCurrentPage: (page: number) => set({ usersCurrentPage: page }),
   setUsersPerPage: (count: number) =>
     set({ usersPerPage: count, usersCurrentPage: 1 }),
+
   setReposCurrentPage: (page: number) => set({ repoCurrentPage: page }),
   setReposPerPage: (count: number) =>
     set({ reposPerPage: count, repoCurrentPage: 1 }),
 
-  setQuery: (query) => set({ query }),
-
-  fetchUsers: async (query) => {
+  fetchUsersWithPage: async () => {
+    const { query, usersCurrentPage, usersPerPage } = get();
     if (!query) return;
-    set({ loading: true, error: null });
+    set({ usersLoading: true, usersError: null });
+
     try {
-      const users = await searchUsers(query);
-      set({ users: users, loading: false });
+      const data = await searchUsers(query, usersCurrentPage, usersPerPage);
+      set({
+        users: data.items,
+        totalUsers: data.total_count,
+        usersLoading: false
+      });
     } catch (error) {
-      set({ error: "Failed to fetch users" + error, loading: false });
+      set({
+        usersError: "Failed to fetch users: " + error,
+        usersLoading: false
+      });
     }
   },
 
