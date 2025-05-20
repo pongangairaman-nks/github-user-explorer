@@ -1,17 +1,18 @@
 import { TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+// import { useState } from "react";
+import { useUserStore } from "../store/userStore";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
 }
 
 export default function SearchBar({ onSearch }: SearchBarProps) {
-  const [value, setValue] = useState("");
-
+  //   const [value, setValue] = useState("");
+  const { query, setQuery } = useUserStore();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    setValue(newValue);
+    setQuery(newValue);
     onSearch(newValue);
   };
 
@@ -19,7 +20,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     <TextField
       fullWidth
       label="Search GitHub User"
-      value={value}
+      value={query}
       onChange={handleChange}
       InputProps={{
         startAdornment: (
