@@ -1,5 +1,6 @@
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import SearchBar from "../components/SearchBar";
+import UserCard from "../components/UserCard";
 
 export default function SearchPage() {
   const handleSearch = (query: string) => {
@@ -11,7 +12,11 @@ export default function SearchPage() {
         <SearchBar onSearch={handleSearch} />
       </Grid>
       <Grid item xs={12} md={4} lg={7}>
-        <Box>Users List</Box>
+        <UserCard
+          avatarUrl="https://avatars.githubusercontent.com/u/583231?v=4"
+          username="octocat"
+          onClick={() => console.log("Navigate to profile")}
+        />
       </Grid>
     </Grid>
   );
