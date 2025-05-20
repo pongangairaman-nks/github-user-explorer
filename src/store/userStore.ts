@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import axios from "axios";
 import {
   searchUsers,
   fetchUserProfileAPI,
@@ -29,36 +30,61 @@ interface GitHubRepo {
 
 interface UserStore {
   query: string;
-  results: GitHubUser[];
+  users: GitHubUser[];
+  totalUsers: number;
+  usersCurrentPage: number;
+  usersPerPage: number;
   loading: boolean;
   error: string | null;
 
   userProfile: UserProfile | null;
   profileLoading: boolean;
   profileError: string | null;
+
   repos: GitHubRepo[];
   repoLoading: boolean;
   repoError: string | null;
+  repoCurrentPage: number;
+  reposPerPage: number;
+  totalRepos: number;
+
+  setReposCurrentPage: (query: number) => void;
+  setReposPerPage: (query: number) => void;
 
   setQuery: (query: string) => void;
   fetchUsers: (query: string) => void;
 
   fetchUserProfile: (username: string) => void;
-  fetchRepos: (username: string) => void;
+  fetchReposWithPage: (username: string, page: number) => void;
 }
 
-export const useUserStore = create<UserStore>((set) => ({
+export const useUserStore = create<UserStore>((set, get) => ({
   query: "",
-  results: [],
+  users: [],
+  totalUsers: 0,
+  usersCurrentPage: 1,
+  usersPerPage: 10,
   loading: false,
   error: null,
 
   userProfile: null,
   profileLoading: false,
   profileError: null,
+
   repos: [],
+  repoCurrentPage: 1,
+  reposPerPage: 10,
+  totalRepos: 0,
   repoLoading: false,
   repoError: null,
+
+  setUsersCurrentPage: (page: number) => set({ usersCurrentPage: page }),
+  setUsersPerPage: (count: number) =>
+    set({ usersPerPage: count, usersCurrentPage: 1 }),
+  setReposCurrentPage: (page: number) => set({ repoCurrentPage: page }),
+  setReposPerPage: (count: number) =>
+    set({ reposPerPage: count, repoCurrentPage: 1 }),
+
   setQuery: (query) => set({ query }),
 
   fetchUsers: async (query) => {
@@ -66,7 +92,7 @@ export const useUserStore = create<UserStore>((set) => ({
     set({ loading: true, error: null });
     try {
       const users = await searchUsers(query);
-      set({ results: users, loading: false });
+      set({ users: users, loading: false });
     } catch (error) {
       set({ error: "Failed to fetch users" + error, loading: false });
     }
@@ -85,14 +111,54 @@ export const useUserStore = create<UserStore>((set) => ({
       });
     }
   },
-  fetchRepos: async (username) => {
+  fetchReposWithPage: async (username: string, page: number = 1) => {
+    const { reposPerPage } = get();
     if (!username) return;
-    set({ repoLoading: true, repoError: null, repos: [] });
-    try {
-      const repos = await getUserRepos(username);
-      set({ repos, repoLoading: false });
-    } catch (error) {
-      set({ repoError: "Failed to fetch repos: " + error, repoLoading: false });
+    if (page === 1) {
+      set({
+        repoLoading: true,
+        repoError: null,
+        repos: [],
+        repoCurrentPage: 1
+      });
+      try {
+        const profile = await fetchUserProfileAPI(username);
+        const total = profile.public_repos;
+        const data = await getUserRepos(username, page, reposPerPage);
+        set({
+          userProfile: profile,
+          repos: data,
+          repoLoading: false,
+          repoCurrentPage: page,
+          totalRepos: total
+        });
+      } catch (error) {
+        const message = axios.isAxiosError(error)
+          ? error.response?.data?.message || error.message
+          : "An unknown error occurred";
+        set({
+          repoError: "Failed to fetch repos: " + message,
+          repoLoading: false
+        });
+      }
+    } else {
+      set({ repoLoading: true, repoError: null });
+      try {
+        const data = await getUserRepos(username, page, reposPerPage);
+        set({
+          repos: data,
+          repoCurrentPage: page,
+          repoLoading: false
+        });
+      } catch (error) {
+        const message = axios.isAxiosError(error)
+          ? error.response?.data?.message || error.message
+          : "An unknown error occurred";
+        set({
+          repoError: "Failed to fetch repos: " + message,
+          repoLoading: false
+        });
+      }
     }
   }
 }));

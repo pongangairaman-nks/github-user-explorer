@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
 import UserProfileCard from "../components/UserProfileCard";
-import { Typography, Grid } from "@mui/material";
+import { Typography, Grid, Box, type SelectChangeEvent } from "@mui/material";
 import RepoCard from "../components/RepoCard";
 import RepoCardSkeleton from "../components/RepoCardSkeleton";
 import UserProfileCardSkeleton from "../components/UserProfileCardSkeleton";
+import PaginationServerSide from "../components/PaginationServerSide";
 
 const UserProfilePage: React.FC = () => {
   const { username } = useParams<{ username: string }>();
@@ -14,16 +15,30 @@ const UserProfilePage: React.FC = () => {
     profileLoading,
     repos,
     repoLoading,
+    totalRepos,
+    reposPerPage,
+    repoCurrentPage,
+    setReposPerPage,
     fetchUserProfile,
-    fetchRepos
+    fetchReposWithPage
   } = useUserStore();
+
+  const handlePageClick = (page: number) => {
+    if (userProfile) fetchReposWithPage(userProfile.login, page);
+  };
+
+  const handlePerPageChange = (event: SelectChangeEvent<number>) => {
+    const newPerPage = parseInt(event.target.value as string, 10);
+    setReposPerPage(newPerPage);
+    if (userProfile) fetchReposWithPage(userProfile.login, 1);
+  };
 
   useEffect(() => {
     if (username) {
       fetchUserProfile(username);
-      fetchRepos(username);
+      fetchReposWithPage(username, 1);
     }
-  }, [username, fetchUserProfile, fetchRepos]);
+  }, [username, fetchUserProfile, fetchReposWithPage]);
 
   return (
     <Grid container spacing={2}>
@@ -59,6 +74,21 @@ const UserProfilePage: React.FC = () => {
             No repositories found.
           </Typography>
         )}
+        <Box
+          mt={4}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          flexWrap="wrap"
+        >
+          <PaginationServerSide
+            totalRepos={totalRepos}
+            reposPerPage={reposPerPage}
+            currentPage={repoCurrentPage}
+            onPageChange={handlePageClick}
+            onPerPageChange={handlePerPageChange}
+          />
+        </Box>
       </Grid>
     </Grid>
   );
