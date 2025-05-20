@@ -30,7 +30,10 @@ interface GitHubRepo {
 
 interface UserStore {
   query: string;
-  results: GitHubUser[];
+  users: GitHubUser[];
+  totalUsers: number;
+  usersCurrentPage: number;
+  usersPerPage: number;
   loading: boolean;
   error: string | null;
 
@@ -41,25 +44,26 @@ interface UserStore {
   repos: GitHubRepo[];
   repoLoading: boolean;
   repoError: string | null;
-  repoPage: number;
-  perPage: number;
+  repoCurrentPage: number;
+  reposPerPage: number;
   totalRepos: number;
-  hasMoreRepos: boolean;
 
-  setRepoPage: (query: number) => void;
-  setPerPage: (query: number) => void;
+  setReposCurrentPage: (query: number) => void;
+  setReposPerPage: (query: number) => void;
 
   setQuery: (query: string) => void;
   fetchUsers: (query: string) => void;
 
   fetchUserProfile: (username: string) => void;
-  fetchRepos: (username: string) => void;
-  fetchRepoPage: (username: string, page: number) => void;
+  fetchReposWithPage: (username: string, page: number) => void;
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({
   query: "",
-  results: [],
+  users: [],
+  totalUsers: 0,
+  usersCurrentPage: 1,
+  usersPerPage: 10,
   loading: false,
   error: null,
 
@@ -68,15 +72,18 @@ export const useUserStore = create<UserStore>((set, get) => ({
   profileError: null,
 
   repos: [],
+  repoCurrentPage: 1,
+  reposPerPage: 10,
+  totalRepos: 0,
   repoLoading: false,
   repoError: null,
-  repoPage: 1,
-  perPage: 10,
-  totalRepos: 0,
-  hasMoreRepos: true,
 
-  setRepoPage: (page: number) => set({ repoPage: page }),
-  setPerPage: (count: number) => set({ perPage: count, repoPage: 1 }),
+  setUsersCurrentPage: (page: number) => set({ usersCurrentPage: page }),
+  setUsersPerPage: (count: number) =>
+    set({ usersPerPage: count, usersCurrentPage: 1 }),
+  setReposCurrentPage: (page: number) => set({ repoCurrentPage: page }),
+  setReposPerPage: (count: number) =>
+    set({ reposPerPage: count, repoCurrentPage: 1 }),
 
   setQuery: (query) => set({ query }),
 
@@ -85,7 +92,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const users = await searchUsers(query);
-      set({ results: users, loading: false });
+      set({ users: users, loading: false });
     } catch (error) {
       set({ error: "Failed to fetch users" + error, loading: false });
     }
@@ -104,53 +111,54 @@ export const useUserStore = create<UserStore>((set, get) => ({
       });
     }
   },
-  fetchRepos: async (username) => {
-    const { perPage } = get();
+  fetchReposWithPage: async (username: string, page: number = 1) => {
+    const { reposPerPage } = get();
     if (!username) return;
-    set({
-      repoLoading: true,
-      repoError: null,
-      repos: [],
-      repoPage: 1,
-      hasMoreRepos: true
-    });
-    try {
-      const profile = await fetchUserProfileAPI(username);
-      const total = profile.public_repos;
-
-      const data = await getUserRepos(username, 1, perPage);
+    if (page === 1) {
       set({
-        userProfile: profile,
-        repos: data,
-        repoLoading: false,
-        repoPage: 1,
-        totalRepos: total,
-        hasMoreRepos: data.length >= perPage
+        repoLoading: true,
+        repoError: null,
+        repos: [],
+        repoCurrentPage: 1
       });
-    } catch (error) {
-      const message = axios.isAxiosError(error)
-        ? error.response?.data?.message || error.message
-        : "An unknown error occurred";
-      set({
-        repoError: "Failed to fetch repos: " + message,
-        repoLoading: false
-      });
-    }
-  },
-  fetchRepoPage: async (username: string, page: number) => {
-    const { perPage } = get();
-    set({ repoLoading: true, repoError: null });
-    try {
-      const data = await getUserRepos(username, page, perPage);
-      set({ repos: data, repoPage: page, repoLoading: false });
-    } catch (error) {
-      const message = axios.isAxiosError(error)
-        ? error.response?.data?.message || error.message
-        : "An unknown error occurred";
-      set({
-        repoError: "Failed to fetch repos: " + message,
-        repoLoading: false
-      });
+      try {
+        const profile = await fetchUserProfileAPI(username);
+        const total = profile.public_repos;
+        const data = await getUserRepos(username, page, reposPerPage);
+        set({
+          userProfile: profile,
+          repos: data,
+          repoLoading: false,
+          repoCurrentPage: page,
+          totalRepos: total
+        });
+      } catch (error) {
+        const message = axios.isAxiosError(error)
+          ? error.response?.data?.message || error.message
+          : "An unknown error occurred";
+        set({
+          repoError: "Failed to fetch repos: " + message,
+          repoLoading: false
+        });
+      }
+    } else {
+      set({ repoLoading: true, repoError: null });
+      try {
+        const data = await getUserRepos(username, page, reposPerPage);
+        set({
+          repos: data,
+          repoCurrentPage: page,
+          repoLoading: false
+        });
+      } catch (error) {
+        const message = axios.isAxiosError(error)
+          ? error.response?.data?.message || error.message
+          : "An unknown error occurred";
+        set({
+          repoError: "Failed to fetch repos: " + message,
+          repoLoading: false
+        });
+      }
     }
   }
 }));

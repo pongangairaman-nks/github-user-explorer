@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function SearchPage() {
   const navigate = useNavigate();
-  const { results, loading, fetchUsers, query } = useUserStore();
+  const { users, loading, fetchUsers, query } = useUserStore();
 
   useEffect(() => {
     const debounce = setTimeout(() => {
@@ -30,8 +30,8 @@ export default function SearchPage() {
       <Grid item xs={12} md={4} lg={7}>
         {loading ? (
           Array.from({ length: 5 }).map((_, i) => <UserCardSkeleton key={i} />)
-        ) : results.length > 0 ? (
-          results.map((user) => (
+        ) : users.length > 0 ? (
+          users.map((user) => (
             <UserCard
               key={user.id}
               avatarUrl={user.avatar_url}
