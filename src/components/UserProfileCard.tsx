@@ -169,6 +169,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                   sx={{
                     fontSize: { xs: "1.25rem", sm: "1.5rem" }
                   }}
+                  textAlign={{ xs: "center", sm: "start" }}
                 >
                   {user?.followers || 0}
                 </Typography>
@@ -178,6 +179,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                   sx={{
                     fontSize: { xs: "0.75rem", sm: "0.875rem" }
                   }}
+                  textAlign={{ xs: "center", sm: "start" }}
                 >
                   Followers
                 </Typography>
@@ -191,6 +193,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                   sx={{
                     fontSize: { xs: "1.25rem", sm: "1.5rem" }
                   }}
+                  textAlign={{ xs: "center", sm: "start" }}
                 >
                   {user?.following || 0}
                 </Typography>
@@ -200,6 +203,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                   sx={{
                     fontSize: { xs: "0.75rem", sm: "0.875rem" }
                   }}
+                  textAlign={{ xs: "center", sm: "start" }}
                 >
                   Following
                 </Typography>
@@ -213,6 +217,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                   sx={{
                     fontSize: { xs: "1.25rem", sm: "1.5rem" }
                   }}
+                  textAlign={{ xs: "center", sm: "start" }}
                 >
                   {user?.public_repos || 0}
                 </Typography>
@@ -222,6 +227,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                   sx={{
                     fontSize: { xs: "0.75rem", sm: "0.875rem" }
                   }}
+                  textAlign={{ xs: "center", sm: "start" }}
                 >
                   Repositories
                 </Typography>
@@ -235,6 +241,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                   sx={{
                     fontSize: { xs: "1.25rem", sm: "1.5rem" }
                   }}
+                  textAlign={{ xs: "center", sm: "start" }}
                 >
                   {user?.public_gists || 0}
                 </Typography>
@@ -244,6 +251,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                   sx={{
                     fontSize: { xs: "0.75rem", sm: "0.875rem" }
                   }}
+                  textAlign={{ xs: "center", sm: "start" }}
                 >
                   Gists
                 </Typography>

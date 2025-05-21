@@ -143,7 +143,7 @@ const UserProfilePage: React.FC = () => {
           </Grid>
         )}
       </Grid>
-      {repos.length > 6 && (
+      {totalRepos > 6 && (
         <Grid item container xs={12} md={12} lg={12}>
           <Box
             display="flex"

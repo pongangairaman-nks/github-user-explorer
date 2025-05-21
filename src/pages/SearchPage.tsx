@@ -127,7 +127,7 @@ export default function SearchPage() {
             </Typography>
           </Box>
         )}
-        {users?.length > 6 && (
+        {totalUsers > 6 && (
           <PaginationServerSide
             currentPage={usersCurrentPage}
             perPage={usersPerPage}
