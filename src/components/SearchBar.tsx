@@ -4,10 +4,7 @@ import { useUserStore } from "../store/userStore";
 import { Typography } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import colors from "../constants/colors";
-
-interface SearchBarProps {
-  onSearch: (query: string) => void;
-}
+import type { SearchBarProps } from "../types/search";
 
 export default function SearchBar({ onSearch }: SearchBarProps) {
   const { query, setQuery } = useUserStore();

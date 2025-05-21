@@ -2,19 +2,7 @@ import React from "react";
 import { Avatar, Typography, Box, Paper, Grid, Divider } from "@mui/material";
 import { LocationOn } from "@mui/icons-material";
 import colors from "../constants/colors";
-
-interface UserProfile {
-  avatar_url: string;
-  bio: string | null;
-  followers: number;
-  public_repos: number;
-  login: string;
-  name: string;
-  html_url: string;
-  location: string;
-  following: string;
-  public_gists: string;
-}
+import type { UserProfile } from "../types/profile";
 
 interface UserProfileCardProps {
   user: UserProfile;
@@ -74,10 +62,11 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
               rel="noopener noreferrer"
               style={{
                 background: "#d1d3ff",
-                padding: 4,
+                padding: "8px 16px 8px 16px",
                 borderRadius: "4px",
                 color: "#868cff",
-                fontWeight: 600
+                fontWeight: 600,
+                fontSize: 16
               }}
             >
               View on GitHub

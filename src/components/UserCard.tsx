@@ -1,13 +1,7 @@
 import React from "react";
 import { Card, Avatar, Typography, Box, Chip } from "@mui/material";
 import colors from "../constants/colors";
-
-interface UserCardProps {
-  avatarUrl: string;
-  githubUrl: string;
-  username: string;
-  onClick?: () => void;
-}
+import type { UserCardProps } from "../types/search";
 
 const UserCard: React.FC<UserCardProps> = ({
   avatarUrl,

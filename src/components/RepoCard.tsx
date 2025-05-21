@@ -4,22 +4,12 @@ import StarIcon from "@mui/icons-material/Star";
 import { CallSplit as CallSplitIcon } from "@mui/icons-material";
 import { formatDate } from "../utils/dateUtils";
 import languageColors from "../constants/languageColors";
-
-interface RepositoryCardProps {
-  name: string;
-  updatedDate: string;
-  description?: string;
-  language: string | null;
-  stars: number;
-  forks: number;
-  url: string;
-}
+import type { RepositoryCardProps } from "../types/profile";
 
 const RepoCard: React.FC<RepositoryCardProps> = ({
   name,
   description,
   stars,
-  // url,
   updatedDate,
   forks,
   language
@@ -40,8 +30,7 @@ const RepoCard: React.FC<RepositoryCardProps> = ({
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
         "&:hover": {
           borderColor: "#7C81DD",
-          boxShadow: "0 4px 12px rgba(186, 169, 236, 0.25)",
-          cursor: "pointer"
+          boxShadow: "0 4px 12px rgba(186, 169, 236, 0.25)"
         },
         display: "flex",
         flexDirection: "column",
@@ -54,10 +43,7 @@ const RepoCard: React.FC<RepositoryCardProps> = ({
         fontWeight={600}
         gutterBottom
         sx={{
-          display: "inline-block",
-          "&:hover": {
-            textDecoration: "underline"
-          }
+          display: "inline-block"
         }}
       >
         {name}
