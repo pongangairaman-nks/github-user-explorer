@@ -1,7 +1,14 @@
-import { Box, Grid, Typography, type SelectChangeEvent } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Grid,
+  Snackbar,
+  Typography,
+  type SelectChangeEvent
+} from "@mui/material";
 import SearchBar from "../components/SearchBar";
 import UserCard from "../components/UserCard";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { useUserStore } from "../store/userStore";
 import UserCardSkeleton from "../components/UserCardSkeleton";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +24,10 @@ export default function SearchPage() {
     totalUsers,
     usersPerPage,
     usersCurrentPage,
+    open,
+    message,
+    severity,
+    hideSnackbar,
     setUsersCurrentPage,
     setUsersPerPage,
     fetchUsersWithPage,
@@ -30,10 +41,6 @@ export default function SearchPage() {
 
     return () => clearTimeout(debounce);
   }, [query, fetchUsersWithPage]);
-
-  const handleSearch = (query: string) => {
-    console.log("Search query:", query);
-  };
 
   const handlePageClick = (page: number) => {
     setUsersCurrentPage(page);
@@ -49,8 +56,35 @@ export default function SearchPage() {
 
   return (
     <Grid container>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={hideSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          severity={severity}
+          onClose={hideSnackbar}
+          sx={{
+            width: "100%",
+            backgroundColor: severity === "error" ? "#fd6461" : undefined,
+            color: "#fff",
+            fontWeight: 500,
+            boxShadow: 3,
+            borderRadius: 2,
+            "& .MuiAlert-icon": {
+              color: "#fff"
+            },
+            "& .MuiAlert-action": {
+              color: "#fff"
+            }
+          }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
       <Grid item xs={12} md={12} lg={12}>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar />
       </Grid>
       <Grid
         item
@@ -77,13 +111,14 @@ export default function SearchPage() {
           Array.from({ length: 5 }).map((_, i) => <UserCardSkeleton key={i} />)
         ) : users.length > 0 ? (
           users.map((user) => (
-            <UserCard
-              key={user.id}
-              avatarUrl={user.avatar_url}
-              githubUrl={user.html_url}
-              username={user.login}
-              onClick={() => navigate(`/user/${user.login}`)}
-            />
+            <Fragment key={user.id}>
+              <UserCard
+                avatarUrl={user.avatar_url}
+                githubUrl={user.html_url}
+                username={user.login}
+                onClick={() => navigate(`/user/${user.login}`)}
+              />
+            </Fragment>
           ))
         ) : (
           <Box

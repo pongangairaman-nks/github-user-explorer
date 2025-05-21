@@ -92,15 +92,14 @@ const UserProfilePage: React.FC = () => {
       <Grid item container spacing={3} xs={12} md={12} lg={12}>
         {repoLoading ? (
           Array.from({ length: 6 }).map((_, i) => (
-            <Grid item xs={12} md={6} lg={6}>
-              <RepoCardSkeleton key={i} />
+            <Grid item key={i} xs={12} md={6} lg={6}>
+              <RepoCardSkeleton />
             </Grid>
           ))
         ) : repos.length > 0 ? (
           repos.map((repo) => (
-            <Grid item xs={12} md={6} lg={6}>
+            <Grid item key={repo?.id} xs={12} md={6} lg={6}>
               <RepoCard
-                key={repo?.id}
                 name={repo?.name}
                 description={repo?.description}
                 stars={repo?.stargazers_count}
