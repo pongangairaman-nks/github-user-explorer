@@ -57,6 +57,16 @@ interface UserStore {
   reposPerPage: number;
   totalRepos: number;
 
+  open: boolean;
+  message: string;
+  severity: "success" | "error" | "warning" | "info";
+
+  showSnackbar: (
+    message: string,
+    severity?: "success" | "error" | "warning" | "info"
+  ) => void;
+  hideSnackbar: () => void;
+
   setQuery: (query: string) => void;
   setUsersCurrentPage: (query: number) => void;
   setUsersPerPage: (query: number) => void;
@@ -90,6 +100,13 @@ export const useUserStore = create<UserStore>((set, get) => ({
   repoLoading: false,
   repoError: null,
 
+  open: false,
+  message: "",
+  severity: "info",
+  showSnackbar: (message: string, severity = "info") =>
+    set({ open: true, message, severity }),
+  hideSnackbar: () => set({ open: false }),
+
   setQuery: (query) => set({ query }),
   setUsersCurrentPage: (page: number) => set({ usersCurrentPage: page }),
   setUsersPerPage: (count: number) =>
@@ -107,6 +124,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
         totalUsers: 0,
         usersLoading: false
       });
+      return;
     }
     set({ usersLoading: true, usersError: null });
 
@@ -117,9 +135,15 @@ export const useUserStore = create<UserStore>((set, get) => ({
         totalUsers: data.total_count,
         usersLoading: false
       });
+      if (data.items?.length === 0) {
+        get().showSnackbar("User not found!", "error");
+      }
     } catch (error) {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message || error.message
+        : "An unknown error occurred";
       set({
-        usersError: "Failed to fetch users: " + error,
+        usersError: "Failed to fetch users: " + message,
         usersLoading: false
       });
     }
@@ -132,8 +156,11 @@ export const useUserStore = create<UserStore>((set, get) => ({
       const profile = await fetchUserProfileAPI(username);
       set({ userProfile: profile, profileLoading: false });
     } catch (error) {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message || error.message
+        : "An unknown error occurred";
       set({
-        profileError: "Failed to fetch profile" + error,
+        profileError: "Failed to fetch profile: " + message,
         profileLoading: false
       });
     }
