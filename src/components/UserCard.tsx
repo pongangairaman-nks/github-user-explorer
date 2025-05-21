@@ -1,14 +1,17 @@
 import React from "react";
-import { Card, Avatar, Typography, Box, Button } from "@mui/material";
+import { Card, Avatar, Typography, Box, Chip } from "@mui/material";
+import colors from "../constants/colors";
 
 interface UserCardProps {
   avatarUrl: string;
+  githubUrl: string;
   username: string;
   onClick?: () => void;
 }
 
 const UserCard: React.FC<UserCardProps> = ({
   avatarUrl,
+  githubUrl,
   username,
   onClick
 }) => {
@@ -18,21 +21,46 @@ const UserCard: React.FC<UserCardProps> = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        mb: 2,
+        mb: 1.5,
         px: 2,
-        py: 1,
+        py: 2.5,
         cursor: "pointer",
-        "&:hover": { backgroundColor: "#f5f5f5" }
+        backgroundColor: `linear-gradient(135deg, ${colors.blueLight6} 0%, ${colors.blueLight5} 100%)`,
+        "&:hover": { border: `1px solid ${colors.hoverBorder}` }
       }}
       onClick={onClick}
     >
       <Box display="flex" alignItems="center" gap={2}>
-        <Avatar src={avatarUrl} alt={username} />
-        <Typography variant="subtitle1">{username}</Typography>
+        <Avatar src={avatarUrl} alt={username} sx={{ width: 76, height: 76 }} />
+        <Box>
+          <Typography fontSize={19} fontWeight={600}>
+            {username}
+          </Typography>
+          <Box sx={{ mt: 0.5 }}>
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: colors.hoverBorder }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              View on GitHub
+            </a>
+          </Box>
+        </Box>
       </Box>
-      <Button variant="outlined" size="small">
-        View Profile
-      </Button>
+      <Chip
+        label={<Typography color={colors.darkPurple}>Clickable</Typography>}
+        onClick={onClick}
+        sx={{
+          background: colors.chipBg,
+          px: 1,
+          borderRadius: "4px",
+          "&:hover": {
+            background: colors.purpleHoverBg
+          }
+        }}
+      />
     </Card>
   );
 };

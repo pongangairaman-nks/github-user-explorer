@@ -9,6 +9,7 @@ import {
 interface GitHubUser {
   login: string;
   avatar_url: string;
+  html_url: string;
   id: number;
 }
 
@@ -18,6 +19,11 @@ interface UserProfile {
   bio: string | null;
   followers: number;
   public_repos: number;
+  name: string;
+  html_url: string;
+  location: string;
+  following: string;
+  public_gists: string;
 }
 
 interface GitHubRepo {
@@ -26,6 +32,9 @@ interface GitHubRepo {
   description: string;
   stargazers_count: number;
   html_url: string;
+  forks_count: number;
+  updated_at: string;
+  language: string | null;
 }
 
 interface UserStore {
