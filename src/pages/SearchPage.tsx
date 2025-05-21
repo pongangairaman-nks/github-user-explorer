@@ -95,6 +95,7 @@ export default function SearchPage() {
               justifyContent: "center",
               alignItems: "center",
               border: `1px solid ${colors.purpleLight}`,
+              borderRadius: "4px",
               padding: 4
             }}
           >

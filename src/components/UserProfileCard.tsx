@@ -50,14 +50,14 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                 gutterBottom
                 color={colors.white}
               >
-                {user.name || user.login}
+                {user?.name || user?.login}
               </Typography>
               <Typography variant="subtitle1" color={colors.white} gutterBottom>
-                {user.login || "-"}
+                {user?.login || "-"}
               </Typography>
             </Box>
             <a
-              href={user.html_url}
+              href={user?.html_url}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -90,30 +90,34 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-            <Typography
-              variant="body2"
-              color={colors.white}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              {user.bio}
-            </Typography>
+            {user?.bio && (
+              <Typography
+                variant="body2"
+                color={colors.white}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                {user.bio}
+              </Typography>
+            )}
             <Box sx={{ mx: 2 }}>
               <Divider orientation="vertical" />
             </Box>
-            <Typography
-              variant="body2"
-              color={colors.white}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <LocationOn sx={{ fontSize: 16, mr: 0.5 }} />
-              {user.location}
-            </Typography>
+            {user?.location && (
+              <Typography
+                variant="body2"
+                color={colors.white}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                <LocationOn sx={{ fontSize: 16, mr: 0.5 }} />
+                {user.location}
+              </Typography>
+            )}
           </Box>
 
           <Grid container spacing={6} sx={{ mt: 2 }}>
             <Grid item>
               <Typography variant="h5" component="div" color={colors.white}>
-                {user.followers}
+                {user?.followers || 0}
               </Typography>
               <Typography variant="body2" color={colors.white}>
                 Followers
@@ -121,7 +125,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
             </Grid>
             <Grid item>
               <Typography variant="h5" component="div" color={colors.white}>
-                {user.following}
+                {user?.following || 0}
               </Typography>
               <Typography variant="body2" color={colors.white}>
                 Following
@@ -129,7 +133,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
             </Grid>
             <Grid item>
               <Typography variant="h5" component="div" color={colors.white}>
-                {user.public_repos}
+                {user?.public_repos || 0}
               </Typography>
               <Typography variant="body2" color={colors.white}>
                 Repositories
@@ -137,7 +141,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
             </Grid>
             <Grid item>
               <Typography variant="h5" component="div" color={colors.white}>
-                {user.public_gists}
+                {user?.public_gists || 0}
               </Typography>
               <Typography variant="body2" color={colors.white}>
                 Gists

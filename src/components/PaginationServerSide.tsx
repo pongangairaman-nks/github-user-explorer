@@ -64,8 +64,9 @@ const PaginationServerSide: React.FC<PaginationProps> = ({
       alignItems="center"
       flexWrap="wrap"
       width={"100%"}
+      mt={2}
     >
-      <FormControl sx={{ width: 200, mb: 2 }}>
+      <FormControl sx={{ width: 200 }}>
         <Select
           value={perPage}
           onChange={onPerPageChange}
@@ -100,7 +101,7 @@ const PaginationServerSide: React.FC<PaginationProps> = ({
           <MenuItem disabled value="">
             <em>Rows Per Page</em>
           </MenuItem>
-          {[5, 10, 20, 30].map((count) => (
+          {[6, 12, 20, 30].map((count) => (
             <MenuItem key={count} value={count}>
               {count}
             </MenuItem>
