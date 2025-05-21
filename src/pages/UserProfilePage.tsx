@@ -8,6 +8,7 @@ import RepoCardSkeleton from "../components/RepoCardSkeleton";
 import UserProfileCardSkeleton from "../components/UserProfileCardSkeleton";
 import PaginationServerSide from "../components/PaginationServerSide";
 import { ArrowBack } from "@mui/icons-material";
+import colors from "../constants/colors";
 
 const UserProfilePage: React.FC = () => {
   const { username } = useParams<{ username: string }>();
@@ -49,8 +50,13 @@ const UserProfilePage: React.FC = () => {
           sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
           onClick={() => navigate("/")}
         >
-          <ArrowBack fontSize="small" />
-          <Typography align="center" fontSize={16} ml={1}>
+          <ArrowBack fontSize="small" sx={{ color: "#4b52ce" }} />
+          <Typography
+            align="center"
+            fontSize={{ xs: 14, sm: 16 }}
+            ml={1}
+            color={"#4b52ce"}
+          >
             Back to Search
           </Typography>
         </Box>
@@ -76,9 +82,16 @@ const UserProfilePage: React.FC = () => {
           </Typography>
         )}
       </Grid>
+      <Grid item xs={12} md={12} lg={12}>
+        <Box sx={{ mb: 2, ml: 0.5 }}>
+          <Typography fontSize={20} fontWeight={600} color={colors.hoverBorder}>
+            Repositories
+          </Typography>
+        </Box>
+      </Grid>
       <Grid item container spacing={3} xs={12} md={12} lg={12}>
         {repoLoading ? (
-          Array.from({ length: 5 }).map((_, i) => (
+          Array.from({ length: 6 }).map((_, i) => (
             <Grid item xs={12} md={6} lg={6}>
               <RepoCardSkeleton key={i} />
             </Grid>
@@ -87,39 +100,67 @@ const UserProfilePage: React.FC = () => {
           repos.map((repo) => (
             <Grid item xs={12} md={6} lg={6}>
               <RepoCard
-                key={repo.id}
-                name={repo.name}
-                description={repo.description}
-                stars={repo.stargazers_count}
-                url={repo.html_url}
-                updatedDate={repo.updated_at}
-                forks={repo.forks_count}
-                language={repo.language}
+                key={repo?.id}
+                name={repo?.name}
+                description={repo?.description}
+                stars={repo?.stargazers_count}
+                url={repo?.html_url}
+                updatedDate={repo?.updated_at}
+                forks={repo?.forks_count}
+                language={repo?.language}
               />
             </Grid>
           ))
         ) : (
-          <Typography variant="body1" color="text.secondary" mt={2}>
-            No repositories found.
-          </Typography>
+          <Grid item xs={12} md={12} lg={12}>
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                border: `1px solid ${colors.purpleLight}`,
+                borderRadius: { xs: "3px", sm: "4px" },
+                padding: { xs: 2, sm: 3, md: 4 },
+                py: { xs: 3, sm: 3.5, md: 4 },
+                mb: 2,
+                minHeight: { xs: "120px", sm: "150px" }
+              }}
+            >
+              <Typography
+                mt={{ xs: 1, sm: 1.5, md: 2 }}
+                fontSize={{ xs: 16, sm: 18, md: 20 }}
+                fontWeight={600}
+                color={"#c497e3"}
+                textAlign="center"
+                px={{ xs: 1, sm: 0 }}
+              >
+                No repositories found
+              </Typography>
+            </Box>
+          </Grid>
         )}
       </Grid>
-      <Grid item container xs={12} md={12} lg={12}>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          width={"100%"}
-        >
-          <PaginationServerSide
-            totalCount={totalRepos}
-            perPage={reposPerPage}
-            currentPage={repoCurrentPage}
-            onPageChange={handlePageClick}
-            onPerPageChange={handlePerPageChange}
-          />
-        </Box>
-      </Grid>
+      {totalRepos > 6 && (
+        <Grid item container xs={12} md={12} lg={12}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            width={"100%"}
+          >
+            <PaginationServerSide
+              totalCount={totalRepos}
+              perPage={reposPerPage}
+              currentPage={repoCurrentPage}
+              onPageChange={handlePageClick}
+              onPerPageChange={handlePerPageChange}
+            />
+          </Box>
+        </Grid>
+      )}
     </Grid>
   );
 };

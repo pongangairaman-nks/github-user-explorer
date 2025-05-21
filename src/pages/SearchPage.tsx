@@ -1,4 +1,4 @@
-import { Grid, Typography, type SelectChangeEvent } from "@mui/material";
+import { Box, Grid, Typography, type SelectChangeEvent } from "@mui/material";
 import SearchBar from "../components/SearchBar";
 import UserCard from "../components/UserCard";
 import { useEffect } from "react";
@@ -6,6 +6,8 @@ import { useUserStore } from "../store/userStore";
 import UserCardSkeleton from "../components/UserCardSkeleton";
 import { useNavigate } from "react-router-dom";
 import PaginationServerSide from "../components/PaginationServerSide";
+import colors from "../constants/colors";
+import { Search } from "@mui/icons-material";
 
 export default function SearchPage() {
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     const debounce = setTimeout(() => {
-      if (query.trim()) fetchUsersWithPage(query.trim());
+      fetchUsersWithPage(query.trim());
     }, 500);
 
     return () => clearTimeout(debounce);
@@ -46,11 +48,31 @@ export default function SearchPage() {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container>
       <Grid item xs={12} md={12} lg={12}>
         <SearchBar onSearch={handleSearch} />
       </Grid>
-      <Grid item xs={12} md={12} lg={12}>
+      <Grid
+        item
+        xs={12}
+        md={12}
+        lg={12}
+        sx={{
+          minHeight: { xs: "200px", sm: "400px" },
+          mt: 4
+        }}
+      >
+        {(usersLoading || users.length > 0) && (
+          <Box sx={{ mb: 2, ml: 0.5 }}>
+            <Typography
+              fontSize={20}
+              fontWeight={600}
+              color={colors.hoverBorder}
+            >
+              {`Search results for "${query}"`}
+            </Typography>
+          </Box>
+        )}
         {usersLoading ? (
           Array.from({ length: 5 }).map((_, i) => <UserCardSkeleton key={i} />)
         ) : users.length > 0 ? (
@@ -64,11 +86,48 @@ export default function SearchPage() {
             />
           ))
         ) : (
-          <Typography variant="body1" color="text.secondary" mt={2}>
-            User not found.
-          </Typography>
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              border: `1px solid ${colors.purpleLight}`,
+              borderRadius: { xs: "3px", sm: "4px" },
+              padding: { xs: 2, sm: 3, md: 4 },
+              py: { xs: 4, sm: 4, md: 4 }
+            }}
+          >
+            <Search
+              sx={{
+                fontSize: { xs: 50, sm: 60, md: 80 },
+                color: "#c497e3"
+              }}
+            />
+            <Typography
+              mt={{ xs: 1.5, sm: 1.5, md: 2 }}
+              fontSize={{ xs: 18, sm: 22, md: 26 }}
+              fontWeight={600}
+              color={"#c497e3"}
+              textAlign="center"
+              px={{ xs: 1, sm: 2 }}
+            >
+              Search for GitHub users
+            </Typography>
+            <Typography
+              fontSize={{ xs: 14, sm: 16, md: 18 }}
+              color={"#c497e3"}
+              textAlign="center"
+              mt={{ xs: 1, sm: 1, md: 1 }}
+              px={{ xs: 2, sm: 2 }}
+            >
+              Enter a username in the search box above
+            </Typography>
+          </Box>
         )}
-        {users?.length > 0 && (
+        {totalUsers > 6 && (
           <PaginationServerSide
             currentPage={usersCurrentPage}
             perPage={usersPerPage}

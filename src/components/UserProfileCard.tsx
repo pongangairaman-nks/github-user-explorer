@@ -2,19 +2,7 @@ import React from "react";
 import { Avatar, Typography, Box, Paper, Grid, Divider } from "@mui/material";
 import { LocationOn } from "@mui/icons-material";
 import colors from "../constants/colors";
-
-interface UserProfile {
-  avatar_url: string;
-  bio: string | null;
-  followers: number;
-  public_repos: number;
-  login: string;
-  name: string;
-  html_url: string;
-  location: string;
-  following: string;
-  public_gists: string;
-}
+import type { UserProfile } from "../types/profile";
 
 interface UserProfileCardProps {
   user: UserProfile;
@@ -44,117 +32,232 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
           <Avatar
             src={user?.avatar_url}
             alt="avatar image"
-            sx={{ width: 180, height: 180 }}
+            sx={{ width: { xs: 120, sm: 180 }, height: { xs: 120, sm: 180 } }}
           />
         </Grid>
         <Grid item xs={12} sm={9}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start"
-            }}
-          >
-            <Box>
-              <Typography
-                variant="h4"
-                component="h1"
-                gutterBottom
-                color={colors.white}
-              >
-                {user.name || user.login}
-              </Typography>
-              <Typography variant="subtitle1" color={colors.white} gutterBottom>
-                {user.login || "-"}
-              </Typography>
-            </Box>
-            <a
-              href={user.html_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                background: "#d1d3ff",
-                padding: 4,
-                borderRadius: "4px",
-                color: "#868cff",
-                fontWeight: 600
+          <Box>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                justifyContent: { xs: "center", sm: "space-between" },
+                alignItems: { xs: "center", sm: "flex-start" },
+                gap: { xs: 2, sm: 0 }
               }}
             >
-              View on GitHub
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="ml-2"
+              <Box>
+                <Typography
+                  variant="h4"
+                  component={"h1"}
+                  gutterBottom
+                  color={colors.white}
+                  sx={{
+                    fontSize: { xs: "1.5rem", sm: "2rem", md: "2.125rem" }
+                  }}
+                >
+                  {user?.name || user?.login}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  color={colors.white}
+                  gutterBottom
+                  sx={{
+                    fontSize: { xs: "0.875rem", sm: "1rem" }
+                  }}
+                >
+                  {user?.login || "-"}
+                </Typography>
+              </Box>
+
+              <a
+                href={user?.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: "#d1d3ff",
+                  padding: "8px 16px",
+                  borderRadius: "4px",
+                  color: "#868cff",
+                  fontWeight: 600,
+                  fontSize: 16,
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center"
+                }}
               >
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </a>
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-            <Typography
-              variant="body2"
-              color={colors.white}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              {user.bio}
-            </Typography>
-            <Box sx={{ mx: 2 }}>
-              <Divider orientation="vertical" />
+                View on GitHub
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ marginLeft: "8px" }}
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </a>
             </Box>
-            <Typography
-              variant="body2"
-              color={colors.white}
-              sx={{ display: "flex", alignItems: "center" }}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { xs: "center", sm: "center" },
+                mt: 1,
+                gap: { xs: 1, sm: 0 }
+              }}
             >
-              <LocationOn sx={{ fontSize: 16, mr: 0.5 }} />
-              {user.location}
-            </Typography>
-          </Box>
+              {user?.bio && (
+                <Typography
+                  variant="body2"
+                  color={colors.white}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    fontSize: { xs: "0.8125rem", sm: "0.875rem" }
+                  }}
+                >
+                  {user.bio}
+                </Typography>
+              )}
+              {user?.bio && user?.location && (
+                <Box
+                  sx={{
+                    mx: 2,
+                    display: { xs: "none", sm: "block" }
+                  }}
+                >
+                  <Divider orientation="vertical" />
+                </Box>
+              )}
+              {user?.location && (
+                <Typography
+                  variant="body2"
+                  color={colors.white}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    fontSize: { xs: "0.8125rem", sm: "0.875rem" }
+                  }}
+                >
+                  <LocationOn sx={{ fontSize: 16, mr: 0.5 }} />
+                  {user.location}
+                </Typography>
+              )}
+            </Box>
+            <Grid
+              container
+              spacing={{ xs: 2, sm: 4, md: 6 }}
+              sx={{
+                mt: { xs: 2, sm: 2 },
+                justifyContent: { xs: "space-between", sm: "flex-start" }
+              }}
+            >
+              <Grid item xs={5} sm="auto">
+                <Typography
+                  variant="h5"
+                  component="div"
+                  color={colors.white}
+                  sx={{
+                    fontSize: { xs: "1.25rem", sm: "1.5rem" }
+                  }}
+                  textAlign={{ xs: "center", sm: "start" }}
+                >
+                  {user?.followers || 0}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color={colors.white}
+                  sx={{
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" }
+                  }}
+                  textAlign={{ xs: "center", sm: "start" }}
+                >
+                  Followers
+                </Typography>
+              </Grid>
 
-          <Grid container spacing={6} sx={{ mt: 2 }}>
-            <Grid item>
-              <Typography variant="h5" component="div" color={colors.white}>
-                {user.followers}
-              </Typography>
-              <Typography variant="body2" color={colors.white}>
-                Followers
-              </Typography>
+              <Grid item xs={5} sm="auto">
+                <Typography
+                  variant="h5"
+                  component="div"
+                  color={colors.white}
+                  sx={{
+                    fontSize: { xs: "1.25rem", sm: "1.5rem" }
+                  }}
+                  textAlign={{ xs: "center", sm: "start" }}
+                >
+                  {user?.following || 0}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color={colors.white}
+                  sx={{
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" }
+                  }}
+                  textAlign={{ xs: "center", sm: "start" }}
+                >
+                  Following
+                </Typography>
+              </Grid>
+
+              <Grid item xs={5} sm="auto">
+                <Typography
+                  variant="h5"
+                  component="div"
+                  color={colors.white}
+                  sx={{
+                    fontSize: { xs: "1.25rem", sm: "1.5rem" }
+                  }}
+                  textAlign={{ xs: "center", sm: "start" }}
+                >
+                  {user?.public_repos || 0}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color={colors.white}
+                  sx={{
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" }
+                  }}
+                  textAlign={{ xs: "center", sm: "start" }}
+                >
+                  Repositories
+                </Typography>
+              </Grid>
+
+              <Grid item xs={5} sm="auto">
+                <Typography
+                  variant="h5"
+                  component="div"
+                  color={colors.white}
+                  sx={{
+                    fontSize: { xs: "1.25rem", sm: "1.5rem" }
+                  }}
+                  textAlign={{ xs: "center", sm: "start" }}
+                >
+                  {user?.public_gists || 0}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color={colors.white}
+                  sx={{
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" }
+                  }}
+                  textAlign={{ xs: "center", sm: "start" }}
+                >
+                  Gists
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Typography variant="h5" component="div" color={colors.white}>
-                {user.following}
-              </Typography>
-              <Typography variant="body2" color={colors.white}>
-                Following
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="h5" component="div" color={colors.white}>
-                {user.public_repos}
-              </Typography>
-              <Typography variant="body2" color={colors.white}>
-                Repositories
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="h5" component="div" color={colors.white}>
-                {user.public_gists}
-              </Typography>
-              <Typography variant="body2" color={colors.white}>
-                Gists
-              </Typography>
-            </Grid>
-          </Grid>
+          </Box>
         </Grid>
       </Grid>
     </Paper>

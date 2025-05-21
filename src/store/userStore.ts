@@ -75,7 +75,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
   users: [],
   totalUsers: 0,
   usersCurrentPage: 1,
-  usersPerPage: 10,
+  usersPerPage: 6,
   usersLoading: false,
   usersError: null,
 
@@ -85,7 +85,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
   repos: [],
   repoCurrentPage: 1,
-  reposPerPage: 10,
+  reposPerPage: 6,
   totalRepos: 0,
   repoLoading: false,
   repoError: null,
@@ -101,7 +101,13 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
   fetchUsersWithPage: async () => {
     const { query, usersCurrentPage, usersPerPage } = get();
-    if (!query) return;
+    if (!query) {
+      set({
+        users: [],
+        totalUsers: 0,
+        usersLoading: false
+      });
+    }
     set({ usersLoading: true, usersError: null });
 
     try {
