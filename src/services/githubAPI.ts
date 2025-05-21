@@ -1,7 +1,7 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 export async function searchUsers(query: string, page = 1, perPage = 10) {
-  const res = await axios.get(`https://api.github.com/search/users`, {
+  const res = await axiosInstance.get("/search/users", {
     params: {
       q: query,
       page,
@@ -12,7 +12,7 @@ export async function searchUsers(query: string, page = 1, perPage = 10) {
 }
 
 export const fetchUserProfileAPI = async (username: string) => {
-  const response = await axios.get(`https://api.github.com/users/${username}`);
+  const response = await axiosInstance.get(`/users/${username}`);
   return response.data;
 };
 
@@ -21,15 +21,12 @@ export const getUserRepos = async (
   page = 1,
   perPage = 10
 ) => {
-  const response = await axios.get(
-    `https://api.github.com/users/${username}/repos`,
-    {
-      params: {
-        page,
-        per_page: perPage,
-        sort: "updated"
-      }
+  const response = await axiosInstance.get(`/users/${username}/repos`, {
+    params: {
+      page,
+      per_page: perPage,
+      sort: "updated"
     }
-  );
+  });
   return response.data;
 };
