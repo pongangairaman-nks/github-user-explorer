@@ -19,6 +19,11 @@ interface UserProfile {
   bio: string | null;
   followers: number;
   public_repos: number;
+  name: string;
+  html_url: string;
+  location: string;
+  following: string;
+  public_gists: string;
 }
 
 interface GitHubRepo {

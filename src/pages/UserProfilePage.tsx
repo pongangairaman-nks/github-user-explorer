@@ -7,7 +7,6 @@ import RepoCard from "../components/RepoCard";
 import RepoCardSkeleton from "../components/RepoCardSkeleton";
 import UserProfileCardSkeleton from "../components/UserProfileCardSkeleton";
 import PaginationServerSide from "../components/PaginationServerSide";
-import colors from "../constants/colors";
 import { ArrowBack } from "@mui/icons-material";
 
 const UserProfilePage: React.FC = () => {
@@ -44,7 +43,7 @@ const UserProfilePage: React.FC = () => {
   }, [username, fetchUserProfile, fetchReposWithPage]);
 
   return (
-    <Grid container rowGap={3}>
+    <Grid container>
       <Grid item xs={12} md={12} lg={12}>
         <Box
           sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
@@ -62,9 +61,8 @@ const UserProfilePage: React.FC = () => {
         md={12}
         lg={12}
         sx={{
+          mt: 2,
           width: "100%",
-          padding: 4,
-          background: `linear-gradient(135deg, ${colors.hoverBorder} 0%, ${colors.darkPurple2} 100%)`,
           borderRadius: 2
         }}
       >
