@@ -11,7 +11,9 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setQuery(newValue);
-    onSearch(newValue);
+    if (onSearch) {
+      onSearch(newValue);
+    }
   };
 
   return (
