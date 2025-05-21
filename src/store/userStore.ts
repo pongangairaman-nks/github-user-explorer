@@ -101,7 +101,13 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
   fetchUsersWithPage: async () => {
     const { query, usersCurrentPage, usersPerPage } = get();
-    if (!query) return;
+    if (!query) {
+      set({
+        users: [],
+        totalUsers: 0,
+        usersLoading: false
+      });
+    }
     set({ usersLoading: true, usersError: null });
 
     try {

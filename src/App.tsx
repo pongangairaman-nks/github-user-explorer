@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { Container } from "@mui/material";
 import SearchPage from "./pages/SearchPage";
 import UserProfilePage from "./pages/UserProfilePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<SearchPage />} />
         <Route path="/user/:username" element={<UserProfilePage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Container>
   );

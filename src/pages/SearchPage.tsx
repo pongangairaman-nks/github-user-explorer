@@ -1,4 +1,4 @@
-import { Grid, Typography, type SelectChangeEvent } from "@mui/material";
+import { Box, Grid, Typography, type SelectChangeEvent } from "@mui/material";
 import SearchBar from "../components/SearchBar";
 import UserCard from "../components/UserCard";
 import { useEffect } from "react";
@@ -6,6 +6,8 @@ import { useUserStore } from "../store/userStore";
 import UserCardSkeleton from "../components/UserCardSkeleton";
 import { useNavigate } from "react-router-dom";
 import PaginationServerSide from "../components/PaginationServerSide";
+import colors from "../constants/colors";
+import { Search } from "@mui/icons-material";
 
 export default function SearchPage() {
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     const debounce = setTimeout(() => {
-      if (query.trim()) fetchUsersWithPage(query.trim());
+      fetchUsersWithPage(query.trim());
     }, 500);
 
     return () => clearTimeout(debounce);
@@ -46,11 +48,31 @@ export default function SearchPage() {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container>
       <Grid item xs={12} md={12} lg={12}>
         <SearchBar onSearch={handleSearch} />
       </Grid>
-      <Grid item xs={12} md={12} lg={12}>
+      <Grid
+        item
+        xs={12}
+        md={12}
+        lg={12}
+        sx={{
+          minHeight: "400px",
+          mt: 4
+        }}
+      >
+        {(usersLoading || users.length > 0) && (
+          <Box sx={{ mb: 2, ml: 0.5 }}>
+            <Typography
+              fontSize={20}
+              fontWeight={600}
+              color={colors.hoverBorder}
+            >
+              {`Search results for "${query}"`}
+            </Typography>
+          </Box>
+        )}
         {usersLoading ? (
           Array.from({ length: 5 }).map((_, i) => <UserCardSkeleton key={i} />)
         ) : users.length > 0 ? (
@@ -64,9 +86,26 @@ export default function SearchPage() {
             />
           ))
         ) : (
-          <Typography variant="body1" color="text.secondary" mt={2}>
-            User not found.
-          </Typography>
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              border: `1px solid ${colors.purpleLight}`,
+              padding: 4
+            }}
+          >
+            <Search sx={{ fontSize: 80, color: "#c497e3" }} />
+            <Typography mt={2} fontSize={26} fontWeight={600} color={"#c497e3"}>
+              Search for GitHub users
+            </Typography>
+            <Typography fontSize={18} color={"#c497e3"}>
+              Enter a username in the search box above
+            </Typography>
+          </Box>
         )}
         {users?.length > 0 && (
           <PaginationServerSide
