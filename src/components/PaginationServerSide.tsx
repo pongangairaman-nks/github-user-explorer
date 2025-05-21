@@ -60,13 +60,21 @@ const PaginationServerSide: React.FC<PaginationProps> = ({
   return (
     <Box
       display="flex"
-      justifyContent="space-between"
+      justifyContent={{ xs: "center", sm: "space-between" }}
       alignItems="center"
       flexWrap="wrap"
       width={"100%"}
       mt={2}
     >
-      <FormControl sx={{ width: 200 }}>
+      <FormControl
+        sx={{
+          width: 200,
+          display: {
+            xs: "none",
+            sm: "block"
+          }
+        }}
+      >
         <Select
           value={perPage}
           onChange={onPerPageChange}
@@ -113,8 +121,8 @@ const PaginationServerSide: React.FC<PaginationProps> = ({
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
           sx={{
-            minWidth: 40,
-            height: 36,
+            minWidth: { xs: 30, sm: 40 },
+            height: { xs: 30, sm: 36 },
             borderRadius: "8px",
             backgroundColor: colors.disabledGrey,
             color: colors.lightPurple,
@@ -137,8 +145,8 @@ const PaginationServerSide: React.FC<PaginationProps> = ({
             <Box
               key={`ellipsis-${index}`}
               sx={{
-                minWidth: 40,
-                height: 36,
+                minWidth: { xs: 30, sm: 40 },
+                height: { xs: 30, sm: 36 },
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -154,8 +162,8 @@ const PaginationServerSide: React.FC<PaginationProps> = ({
               key={page}
               onClick={() => onPageChange(Number(page))}
               sx={{
-                minWidth: 40,
-                height: 36,
+                minWidth: { xs: 30, sm: 40 },
+                height: { xs: 30, sm: 36 },
                 borderRadius: "8px",
                 fontWeight: 600,
                 fontSize: "0.9rem",
@@ -181,8 +189,8 @@ const PaginationServerSide: React.FC<PaginationProps> = ({
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           sx={{
-            minWidth: 40,
-            height: 36,
+            minWidth: { xs: 30, md: 40 },
+            height: { xs: 30, md: 36 },
             borderRadius: "8px",
             backgroundColor: colors.disabledGrey,
             color: colors.lightPurple,

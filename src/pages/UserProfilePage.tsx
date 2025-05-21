@@ -51,7 +51,12 @@ const UserProfilePage: React.FC = () => {
           onClick={() => navigate("/")}
         >
           <ArrowBack fontSize="small" sx={{ color: "#4b52ce" }} />
-          <Typography align="center" fontSize={16} ml={1} color={"#4b52ce"}>
+          <Typography
+            align="center"
+            fontSize={{ xs: 14, sm: 16 }}
+            ml={1}
+            color={"#4b52ce"}
+          >
             Back to Search
           </Typography>
         </Box>
@@ -117,16 +122,20 @@ const UserProfilePage: React.FC = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 border: `1px solid ${colors.purpleLight}`,
-                borderRadius: "4px",
-                padding: 4,
-                mb: 2
+                borderRadius: { xs: "3px", sm: "4px" },
+                padding: { xs: 2, sm: 3, md: 4 },
+                py: { xs: 3, sm: 3.5, md: 4 },
+                mb: 2,
+                minHeight: { xs: "120px", sm: "150px" }
               }}
             >
               <Typography
-                mt={2}
-                fontSize={20}
+                mt={{ xs: 1, sm: 1.5, md: 2 }}
+                fontSize={{ xs: 16, sm: 18, md: 20 }}
                 fontWeight={600}
                 color={"#c497e3"}
+                textAlign="center"
+                px={{ xs: 1, sm: 0 }}
               >
                 No repositories found
               </Typography>
@@ -134,22 +143,24 @@ const UserProfilePage: React.FC = () => {
           </Grid>
         )}
       </Grid>
-      <Grid item container xs={12} md={12} lg={12}>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          width={"100%"}
-        >
-          <PaginationServerSide
-            totalCount={totalRepos}
-            perPage={reposPerPage}
-            currentPage={repoCurrentPage}
-            onPageChange={handlePageClick}
-            onPerPageChange={handlePerPageChange}
-          />
-        </Box>
-      </Grid>
+      {repos.length > 6 && (
+        <Grid item container xs={12} md={12} lg={12}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            width={"100%"}
+          >
+            <PaginationServerSide
+              totalCount={totalRepos}
+              perPage={reposPerPage}
+              currentPage={repoCurrentPage}
+              onPageChange={handlePageClick}
+              onPerPageChange={handlePerPageChange}
+            />
+          </Box>
+        </Grid>
+      )}
     </Grid>
   );
 };

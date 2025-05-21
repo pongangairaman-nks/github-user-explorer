@@ -19,25 +19,32 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       container
       sx={{
         width: "100%",
-        padding: 4,
+        padding: { xs: 2, sm: 3, md: 4 },
         background: `linear-gradient(135deg, ${colors.hoverBorder} 0%, ${colors.darkPurple2} 100%)`,
-        borderRadius: 2
+        borderRadius: { xs: 1, sm: 2 }
       }}
     >
       <Grid
         item
-        md={12}
+        xs={12}
         sx={{ display: "flex", flexDirection: "column", alignItems: "start" }}
       >
         <Box>
           <Typography
-            sx={{ color: colors.white, pb: 2, fontWeight: 600, fontSize: 24 }}
+            sx={{
+              color: colors.white,
+              pb: { xs: 1, sm: 1.5, md: 2 },
+              fontWeight: 600,
+              fontSize: { xs: 20, sm: 22, md: 24 },
+              textAlign: { xs: "center", sm: "left" },
+              width: { xs: "100%", sm: "auto" }
+            }}
           >
             GitHub User Explorer
           </Typography>
         </Box>
       </Grid>
-      <Grid item md={12}>
+      <Grid item xs={12}>
         <Box
           sx={{
             height: "1px",
@@ -48,21 +55,53 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       </Grid>
       <Grid
         item
-        md={9}
+        xs={12}
+        md={3}
         sx={{
           display: "flex",
-          flexDirection: "column",
-          alignItems: "start",
-          justifyContent: "center"
+          justifyContent: "center",
+          alignItems: "center",
+          order: { xs: 1, md: 3 }
         }}
       >
         <Box
           sx={{
-            mt: 4,
-            width: "80%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: { xs: 2, sm: 3, md: 5 },
+            mb: { xs: 2, sm: 2, md: 3 }
+          }}
+        >
+          <GitHubIcon
+            sx={{
+              fontSize: { xs: 60, sm: 70, md: 80 },
+              color: colors.white,
+              mr: { xs: 0, md: 2 }
+            }}
+          />
+        </Box>
+      </Grid>
+
+      <Grid
+        item
+        xs={12}
+        md={9}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: { xs: "center", md: "start" },
+          justifyContent: "center",
+          order: { xs: 2, md: 2 }
+        }}
+      >
+        <Box
+          sx={{
+            mt: { xs: 1, sm: 3, md: 4 },
+            width: { xs: "100%", sm: "90%", md: "80%" },
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: { xs: "center", md: "flex-start" }
           }}
         >
           <TextField
@@ -79,7 +118,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
                 </InputAdornment>
               ),
               sx: {
-                height: "44px",
+                height: { xs: "40px", sm: "44px" },
                 bgcolor: colors.grey,
                 color: "white",
                 "&::placeholder": {
@@ -98,34 +137,26 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
             }}
           />
         </Box>
+
         <Box
           sx={{
-            mt: 2,
+            mt: { xs: 1, sm: 1.5, md: 2 },
+            mb: { xs: 2, md: 0 },
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "center",
+            px: { xs: 2, sm: 3, md: 0 }
           }}
         >
-          <Typography sx={{ color: colors.white, fontSize: 18 }}>
+          <Typography
+            sx={{
+              color: colors.white,
+              fontSize: { xs: 14, sm: 16, md: 18 },
+              textAlign: { xs: "center", md: "left" }
+            }}
+          >
             Search for GitHub users and explore their profiles and repositories
           </Typography>
-        </Box>
-      </Grid>
-      <Grid
-        item
-        md={3}
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            mt: 5,
-            mb: 3
-          }}
-        >
-          <GitHubIcon sx={{ fontSize: 80, color: colors.white, mr: 2 }} />
         </Box>
       </Grid>
     </Grid>
